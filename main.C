@@ -24,7 +24,6 @@ struct vector_3d_scalar_imag
 	double real;
 	double imag;
 };
-
 struct vector_3d_real* Vector_addition_real (struct vector_3d_real *vector_1, struct vector_3d_real *vector_2)
 {
 	struct vector_3d_real *vector_add = (struct vector_3d_real*) malloc(3*sizeof(double));
@@ -343,9 +342,9 @@ void Test_imagine()
 	x_add_r = vector_add->cor_1_real;
 	x_add_i = vector_add->cor_1_imag;
 	y_add_r = vector_add->cor_2_real;
-	y_add_i = vector_add->cor_1_imag;
+	y_add_i = vector_add->cor_2_imag;
 	z_add_r = vector_add->cor_3_real;
-	z_add_i = vector_add->cor_1_imag;
+	z_add_i = vector_add->cor_3_imag;
 
 	scal_r = vector_scalar_mul->real;
 	scal_i = vector_scalar_mul->imag;
@@ -354,8 +353,10 @@ void Test_imagine()
 	x_v_m_i = vector_vector_mul->cor_1_imag;
 	y_v_m_r = vector_vector_mul->cor_2_real;
 	y_v_m_i = vector_vector_mul->cor_2_imag;
-	z_v_m_r = vector_vector_mul->cor_2_real;
+	z_v_m_r = vector_vector_mul->cor_3_real;
 	z_v_m_i = vector_vector_mul->cor_3_imag;
+
+	printf("\n");
 
 	if ((x_add_r < 4.42) && (x_add_r > 4.38) && (y_add_r < -1.9 ) && (y_add_r > -2.3) && (z_add_r < 5.7) && (z_add_r > 5.3))
 	{
@@ -388,7 +389,10 @@ void Test_imagine()
 		{
 			printf("Faaail\n" );
 		}
-	}	
+	}
+
+	printf("\n");
+
 	free(vector_1);
 	free(vector_2);
 	free(vector_add_check);
@@ -416,22 +420,19 @@ int main()
 	struct vector_3d_imag *vector_vector_mul_imag =(struct vector_3d_imag*) malloc(6*sizeof(double));
 
 	n = 5; 
-	while ((n != 1) || (n != 2))
-	{
-		printf("What type of numbers do you want to work?\n");
-		printf("1. If they are real, press 1\n");
-		printf("2. If they are complex, press 2\n");
-		scanf("%d", &n);
-	}
+	printf("What type of numbers do you want to work?\n");
+	printf("1. If they are real, press 1\n");
+	printf("2. If they are complex, press 2\n");
+	scanf("%d", &n);
+	
 	if (n == 1)
 	{
 		printf("Print coordinates of the first vector\n");
 		scanf("%lf,%lf,%lf", &vector1_real->cor_1, &vector1_real->cor_2, &vector1_real->cor_3);
 
 		printf("Print coordinates of the second vector\n");
-		scanf("%lf,%lf,%lf", &vector2_real->cor_1, &vector2_real->cor_2, &vector2_real->cor_3);
-
-		printf("\n");
+scanf("%lf,%lf,%lf", &vector2_real->cor_1, &vector2_real->cor_2, &vector2_real->cor_3);
+printf("\n");
 
 		t = 1;
 	}
