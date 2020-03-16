@@ -181,6 +181,17 @@ Vector* Vector_addition_complex (Vector* vector_1, Vector* vector_2)
 	return vector_add;
 }
 
+// double Scalar(Vector* vec)
+// {
+// 	double a = Get_Real(vec,0)->real;
+// 	double b = Get_Real(vec,1)->real;
+// 	double c = Get_Real(vec,2)->real;
+// 	double Square = a*a + b*b + c*c;
+// 	double scalar = sqrt(Square);
+
+// 	return scalar; 
+// }
+
 Vector* Vector_mul_scalar_real (Vector* vector_1, Vector* vector_2)
 {
 	if(vector_1->dimension != vector_2->dimension) 
@@ -307,13 +318,11 @@ int Select_menu_item_op()
 	do
 	{
 		Menu_type_of_operation();
-		printf("AAAAAAA\n");
 		result = scanf("%d", &menu_item);
-		printf("BBBBB\n");
 		!result ? scanf("%*s") : 0;
 	} while (!result || menu_item > Quantity_menu_items_op || menu_item <= 0); 
 
-	//ClearStdin();
+	ClearStdin();
 	return menu_item;
 }
 
@@ -447,4 +456,7 @@ int main()
 
 		}while(menu_item_op != 4);	
 	}
+
+	
+
 }
