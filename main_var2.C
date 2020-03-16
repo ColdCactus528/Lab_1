@@ -159,9 +159,9 @@ Vector* Vector_addition_real (Vector* vector_1, Vector* vector_2)
 	{
 		Real* sum = Add_Real(Get_Real(vector_1,i), Get_Real(vector_2,i));
 		Set_Elem(vector_add, i, sum);
+		free(sum);
 	}
 
-	free(sum);
 	return vector_add;
 }
 
@@ -177,9 +177,9 @@ Vector* Vector_addition_complex (Vector* vector_1, Vector* vector_2)
 	{
 		Complex* sum = Add_Complex(Get_Complex(vector_1,i), Get_Complex(vector_2,i));
 		Set_Elem(vector_add, i, sum);
+		free(sum);
 	}
 
-	free(sum);
 	return vector_add;
 }
 
@@ -215,10 +215,11 @@ double Vector_mul_scalar_real (Vector* vector_1, Vector* vector_2)
 	{
 		Real* scalar_mul = Mult_Real(Get_Real(vector_1,i), Get_Real(vector_2,i));
 		Set_Elem(vector_scalar_mul, i, scalar_mul);
+		free(scalar_mul);
 	}
 	scalar = Scalar_real(vector_scalar_mul);
 
-	free(vector_scalar_mul);
+	free(vector_scalar_mul->data);
 	free(vector_scalar_mul);
 	return scalar;
 }
@@ -234,11 +235,12 @@ Complex* Vector_mul_scalar_complex (Vector* vector_1, Vector* vector_2)
 	{
 		Complex* scalar_mul = Mult_Complex(Get_Complex(vector_1,i), Get_Complex(vector_2,i));
 		Set_Elem(vector_scalar_mul, i, scalar_mul);
+		free(scalar_mul);
 	}
 
 	Complex* scalar = Scalar_complex(vector_scalar_mul);
 
-	free(vector_scalar_mul);
+	free(vector_scalar_mul->data);
 	free(vector_scalar_mul);
 	return scalar;
 }
@@ -249,13 +251,29 @@ Vector* Vector_mul_vector_real_3d(Vector* vector_1, Vector* vector_2)
 	{
 		Vector* vector_vector_mul = Create_Vector(vector_1->dimension, vector_1->elem_size);
 
-		Real* vector_mul_0 = Sub_Real(Mult_Real(Get_Real(vector_1,1), Get_Real(vector_2,2)), Mult_Real(Get_Real(vector_1,2), Get_Real(vector_2,1)));
+		Real *mult_1, *mult_2;
+
+		mult_1 = Mult_Real(Get_Real(vector_1, 1), Get_Real(vector_2, 2));
+		mult_2 = Mult_Real(Get_Real(vector_1, 2), Get_Real(vector_2, 1));
+		Real* vector_mul_0 = Sub_Real(mult_1, mult_2);
+		free(mult_1);
+		free(mult_2);
 		Set_Elem(vector_vector_mul, 0, vector_mul_0);
-		Real* vector_mul_1 = Sub_Real(Mult_Real(Get_Real(vector_1,2), Get_Real(vector_2,0)), Mult_Real(Get_Real(vector_1,0), Get_Real(vector_2,2)));
+
+		mult_1 = Mult_Real(Get_Real(vector_1, 2), Get_Real(vector_2, 0));
+		mult_2 = Mult_Real(Get_Real(vector_1, 0), Get_Real(vector_2, 2));
+		Real* vector_mul_1 = Sub_Real(mult_1, mult_2);
+		free(mult_1);
+		free(mult_2);
 		Set_Elem(vector_vector_mul, 1, vector_mul_1);
-		Real* vector_mul_2 = Sub_Real(Mult_Real(Get_Real(vector_1,0), Get_Real(vector_2,1)), Mult_Real(Get_Real(vector_1,1), Get_Real(vector_2,0)));
-		Set_Elem(vector_vector_mul, 2, vector_mul_2);
 		
+		mult_1 = Mult_Real(Get_Real(vector_1, 0), Get_Real(vector_2, 1));
+		mult_2 = Mult_Real(Get_Real(vector_1, 1), Get_Real(vector_2, 0));
+		Real* vector_mul_2 = Sub_Real(mult_1, mult_2);
+		free(mult_1);
+		free(mult_2);
+		Set_Elem(vector_vector_mul, 2, vector_mul_2);
+
 		free(vector_mul_0);
 		free(vector_mul_1);
 		free(vector_mul_2);
@@ -273,14 +291,30 @@ Vector* Vector_mul_vector_complex_3d(Vector* vector_1, Vector* vector_2)
 	if ((vector_1->dimension == 3) && (vector_2->dimension == 3))
 	{
 		Vector* vector_vector_mul = Create_Vector(vector_1->dimension, vector_1->elem_size);
-
-		Complex* vector_mul_0 = Sub_Complex(Mult_Complex(Get_Complex(vector_1,1), Get_Complex(vector_2,2)), Mult_Complex(Get_Complex(vector_1,2), Get_Complex(vector_2,1)));
-		Set_Elem(vector_vector_mul, 0, vector_mul_0);
-		Complex* vector_mul_1 = Sub_Complex(Mult_Complex(Get_Complex(vector_1,2), Get_Complex(vector_2,0)), Mult_Complex(Get_Complex(vector_1,0), Get_Complex(vector_2,2)));
-		Set_Elem(vector_vector_mul, 1, vector_mul_1);
-		Complex* vector_mul_2 = Sub_Complex(Mult_Complex(Get_Complex(vector_1,0), Get_Complex(vector_2,1)), Mult_Complex(Get_Complex(vector_1,1), Get_Complex(vector_2,0)));
-		Set_Elem(vector_vector_mul, 2, vector_mul_2);
 		
+		Complex *mult_1, *mult_2;
+
+		mult_1 = Mult_Complex(Get_Complex(vector_1, 1), Get_Complex(vector_2, 2));
+		mult_2 = Mult_Complex(Get_Complex(vector_1, 2), Get_Complex(vector_2, 1));
+		Complex* vector_mul_0 = Sub_Complex(mult_1, mult_2);
+		free(mult_1);
+		free(mult_2);
+		Set_Elem(vector_vector_mul, 0, vector_mul_0);
+
+		mult_1 = Mult_Complex(Get_Complex(vector_1, 2), Get_Complex(vector_2, 0));
+		mult_2 = Mult_Complex(Get_Complex(vector_1, 0), Get_Complex(vector_2, 2));
+		Complex* vector_mul_1 = Sub_Complex(mult_1, mult_2);
+		free(mult_1);
+		free(mult_2);
+		Set_Elem(vector_vector_mul, 1, vector_mul_1);
+		
+		mult_1 = Mult_Complex(Get_Complex(vector_1, 0), Get_Complex(vector_2, 1));
+		mult_2 = Mult_Complex(Get_Complex(vector_1, 1), Get_Complex(vector_2, 0));
+		Complex* vector_mul_2 = Sub_Complex(mult_1, mult_2);
+		free(mult_1);
+		free(mult_2);
+		Set_Elem(vector_vector_mul, 2, vector_mul_2);
+
 		free(vector_mul_0);
 		free(vector_mul_1);
 		free(vector_mul_2);
@@ -369,6 +403,8 @@ Vector* Enter_coordinates_Real(const char* message, Vector* vec)
 	Set_Elem(vector, 1, cor_1);
 	Set_Elem(vector, 2, cor_2);
 
+	free(vec->data);
+	free(vec);
 	free(cor_0);
 	free(cor_1);
 	free(cor_2);
@@ -396,6 +432,8 @@ Vector* Enter_coordinates_Complex(const char* message, Vector* vec)
 	Set_Elem(vector, 1, cor_1);
 	Set_Elem(vector, 2, cor_2);
 
+	free(vec->data);
+	free(vec);
 	free(cor_0);
 	free(cor_1);
 	free(cor_2);
@@ -430,7 +468,10 @@ int main()
 
 			if(menu_item_op == 1)
 			{
-				vector_0_real = Vector_addition_real(vector_1_real, vector_2_real);
+				Vector* vector_buff = Vector_addition_real(vector_1_real, vector_2_real);
+				free(vector_0_real->data);
+				free(vector_0_real);
+				vector_0_real = vector_buff;
 				printf("Result\n");
 				printf("%lf,%lf,%lf\n", Get_Real(vector_0_real,0)->real, Get_Real(vector_0_real,1)->real, Get_Real(vector_0_real,2)->real);
 			}
@@ -442,7 +483,10 @@ int main()
 			}
 			if( menu_item_op == 3)
 			{
-				vector_0_real = Vector_mul_vector_real_3d(vector_1_real, vector_2_real);
+				Vector* vector_buff = Vector_mul_vector_real_3d(vector_1_real, vector_2_real);
+				free(vector_0_real->data);
+				free(vector_0_real);
+				vector_0_real = vector_buff;
 				printf("Result\n");
 				printf("%lf,%lf,%lf\n", Get_Real(vector_0_real,0)->real, Get_Real(vector_0_real,1)->real, Get_Real(vector_0_real,2)->real);
 			}
@@ -462,13 +506,17 @@ int main()
 
 			if(menu_item_op == 1)
 			{
-				vector_0_complex = Vector_addition_complex(vector_1_complex, vector_2_complex);
+				Vector* vector_buff = Vector_addition_complex(vector_1_complex, vector_2_complex);
+				free(vector_0_complex->data);
+				free(vector_0_complex);
+				vector_0_complex = vector_buff;
 				printf("Result\n");
 				printf("Real part of coordinates\n");
 				printf("%lf,%lf,%lf\n", Get_Complex(vector_0_complex,0)->real, Get_Complex(vector_0_complex,1)->real, Get_Complex(vector_0_complex,2)->real);
 				printf("\n");
 				printf("Imagine par of coordinates\n");
 				printf("%lf,%lf,%lf\n", Get_Complex(vector_0_complex,0)->imag, Get_Complex(vector_0_complex,1)->imag, Get_Complex(vector_0_complex,2)->imag);
+				
 			}
 			if(menu_item_op == 2)
 			{
@@ -482,17 +530,26 @@ int main()
 			}
 			if( menu_item_op == 3)
 			{
-				vector_0_complex = Vector_mul_vector_complex_3d(vector_1_complex, vector_2_complex);
+				Vector* vector_buff = Vector_mul_vector_complex_3d(vector_1_complex, vector_2_complex);
+				free(vector_0_complex->data);
+				free(vector_0_complex);
+				vector_0_complex = vector_buff;
 				printf("Result\n");
 				printf("Real part of coordinates\n");
 				printf("%lf,%lf,%lf\n", Get_Complex(vector_0_complex,0)->real, Get_Complex(vector_0_complex,1)->real, Get_Complex(vector_0_complex,2)->real);
 				printf("\n");
 				printf("Imagine par of coordinates\n");
-				printf("%lf,%lf,%lf\n", Get_Complex(vector_0_complex,0)->imag, Get_Complex(vector_0_complex,1)->imag, Get_Complex(vector_0_complex,2)->imag);
+				printf("%lf,%lf,%lf\n", Get_Complex(vector_0_complex,0)->imag, Get_Complex(vector_0_complex,1)->imag, Get_Complex(vector_0_complex,2)->imag);		
 			}
 
 		}while(menu_item_op != 4);	
 	}
+	free(vector_0_real->data);
+	free(vector_1_real->data);
+	free(vector_2_real->data);
+	free(vector_0_complex->data);
+	free(vector_1_complex->data);
+	free(vector_2_complex->data);
 	free(vector_0_real);
 	free(vector_1_real);
 	free(vector_2_real);
