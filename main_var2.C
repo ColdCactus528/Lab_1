@@ -161,6 +161,7 @@ Vector* Vector_addition_real (Vector* vector_1, Vector* vector_2)
 		Set_Elem(vector_add, i, sum);
 	}
 
+	free(sum);
 	return vector_add;
 }
 
@@ -178,6 +179,7 @@ Vector* Vector_addition_complex (Vector* vector_1, Vector* vector_2)
 		Set_Elem(vector_add, i, sum);
 	}
 
+	free(sum);
 	return vector_add;
 }
 
@@ -196,6 +198,7 @@ Complex* Scalar_complex(Vector* vec)
 	Complex* a = Add_Complex(Get_Complex(vec,0), Get_Complex(vec,1));
 	Complex* result = Add_Complex(a,Get_Complex(vec,2));
 
+	free(a);
 	return result;
 }
 
@@ -215,6 +218,8 @@ double Vector_mul_scalar_real (Vector* vector_1, Vector* vector_2)
 	}
 	scalar = Scalar_real(vector_scalar_mul);
 
+	free(vector_scalar_mul);
+	free(vector_scalar_mul);
 	return scalar;
 }
 
@@ -230,8 +235,11 @@ Complex* Vector_mul_scalar_complex (Vector* vector_1, Vector* vector_2)
 		Complex* scalar_mul = Mult_Complex(Get_Complex(vector_1,i), Get_Complex(vector_2,i));
 		Set_Elem(vector_scalar_mul, i, scalar_mul);
 	}
+
 	Complex* scalar = Scalar_complex(vector_scalar_mul);
 
+	free(vector_scalar_mul);
+	free(vector_scalar_mul);
 	return scalar;
 }
 
@@ -247,6 +255,10 @@ Vector* Vector_mul_vector_real_3d(Vector* vector_1, Vector* vector_2)
 		Set_Elem(vector_vector_mul, 1, vector_mul_1);
 		Real* vector_mul_2 = Sub_Real(Mult_Real(Get_Real(vector_1,0), Get_Real(vector_2,1)), Mult_Real(Get_Real(vector_1,1), Get_Real(vector_2,0)));
 		Set_Elem(vector_vector_mul, 2, vector_mul_2);
+		
+		free(vector_mul_0);
+		free(vector_mul_1);
+		free(vector_mul_2);
 		return vector_vector_mul;
 	}
 	else
@@ -268,6 +280,10 @@ Vector* Vector_mul_vector_complex_3d(Vector* vector_1, Vector* vector_2)
 		Set_Elem(vector_vector_mul, 1, vector_mul_1);
 		Complex* vector_mul_2 = Sub_Complex(Mult_Complex(Get_Complex(vector_1,0), Get_Complex(vector_2,1)), Mult_Complex(Get_Complex(vector_1,1), Get_Complex(vector_2,0)));
 		Set_Elem(vector_vector_mul, 2, vector_mul_2);
+		
+		free(vector_mul_0);
+		free(vector_mul_1);
+		free(vector_mul_2);
 		return vector_vector_mul;
 	}
 	else
@@ -353,6 +369,10 @@ Vector* Enter_coordinates_Real(const char* message, Vector* vec)
 	Set_Elem(vector, 1, cor_1);
 	Set_Elem(vector, 2, cor_2);
 
+	free(cor_0);
+	free(cor_1);
+	free(cor_2);
+
 	return vector;
 }
 
@@ -375,6 +395,10 @@ Vector* Enter_coordinates_Complex(const char* message, Vector* vec)
 	Set_Elem(vector, 0, cor_0);
 	Set_Elem(vector, 1, cor_1);
 	Set_Elem(vector, 2, cor_2);
+
+	free(cor_0);
+	free(cor_1);
+	free(cor_2);
 
 	return vector;
 }
