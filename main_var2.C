@@ -143,26 +143,13 @@ Real* Add_Real(Real* r1, Real* r2)
 Real* Sub_Real(Real* r1, Real* r2)
 {
 	Real* r = Create_Real();
-	
-	printf("Sub_Real\n");
-	printf("%lf\n", r1->real);
-	printf("%lf\n", r2->real);
-	
 	r->real = r1->real - r2->real;
-
-	printf("%lf\n", r->real);
-	printf("Sub_Real_end\n");
 
 	return r;
 }
 
 Vector* Vector_addition_real (Vector* vector_1, Vector* vector_2)
-{
-	printf("Vector_1\n");
-	printf("%lf,%lf,%lf\n", Get_Real(vector_1,0)->real, Get_Real(vector_1,1)->real, Get_Real(vector_1,2)->real);
-	printf("Vector_2\n");
-	printf("%lf,%lf,%lf\n", Get_Real(vector_2,0)->real, Get_Real(vector_2,1)->real, Get_Real(vector_2,2)->real);
-			
+{			
 	if(vector_1->dimension != vector_2->dimension) 
 		system("clear"), Error("Vectors of different dimensions do not stack");
 
@@ -171,8 +158,6 @@ Vector* Vector_addition_real (Vector* vector_1, Vector* vector_2)
 	for(size_t i=0; i<vector_1->dimension; i++)
 	{
 		Real* sum = Add_Real(Get_Real(vector_1,i), Get_Real(vector_2,i));
-		printf("Sum\n");
-		printf("%lf\n", sum->real);
 		Set_Elem(vector_add, i, sum);
 	}
 
@@ -210,8 +195,6 @@ Complex* Scalar_complex(Vector* vec)
 {
 	Complex* a = Add_Complex(Get_Complex(vec,0), Get_Complex(vec,1));
 	Complex* result = Add_Complex(a,Get_Complex(vec,2));
-	printf("%lf\n", result->real);
-	printf("%lf\n", result->imag);
 
 	return result;
 }
@@ -258,17 +241,11 @@ Vector* Vector_mul_vector_real_3d(Vector* vector_1, Vector* vector_2)
 	{
 		Vector* vector_vector_mul = Create_Vector(vector_1->dimension, vector_1->elem_size);
 
-		printf("%lf,%lf,%lf\n", Get_Real(vector_1,0)->real, Get_Real(vector_1,1)->real, Get_Real(vector_1,2)->real);
-		printf("%lf,%lf,%lf\n", Get_Real(vector_2,0)->real, Get_Real(vector_2,1)->real, Get_Real(vector_2,2)->real);
-
 		Real* vector_mul_0 = Sub_Real(Mult_Real(Get_Real(vector_1,1), Get_Real(vector_2,2)), Mult_Real(Get_Real(vector_1,2), Get_Real(vector_2,1)));
-		printf("%lf\n", vector_mul_0->real);
 		Set_Elem(vector_vector_mul, 0, vector_mul_0);
 		Real* vector_mul_1 = Sub_Real(Mult_Real(Get_Real(vector_1,2), Get_Real(vector_2,0)), Mult_Real(Get_Real(vector_1,0), Get_Real(vector_2,2)));
-		printf("%lf\n", vector_mul_1->real);
 		Set_Elem(vector_vector_mul, 1, vector_mul_1);
 		Real* vector_mul_2 = Sub_Real(Mult_Real(Get_Real(vector_1,0), Get_Real(vector_2,1)), Mult_Real(Get_Real(vector_1,1), Get_Real(vector_2,0)));
-		printf("%lf\n", vector_mul_2->real);
 		Set_Elem(vector_vector_mul, 2, vector_mul_2);
 		return vector_vector_mul;
 	}
@@ -408,16 +385,20 @@ int main()
 	int menu_item_op;
 	double scalar_real;
 	Complex* scalar_complex = Create_Complex();
+	Vector* vector_0_real = Create_Vector(3, sizeof(Real));
+	Vector* vector_1_real = Create_Vector(3, sizeof(Real));
+	Vector* vector_2_real = Create_Vector(3, sizeof(Real));
+	Vector* vector_0_complex = Create_Vector(3, sizeof(Complex));
+	Vector* vector_1_complex = Create_Vector(3, sizeof(Complex));
+	Vector* vector_2_complex = Create_Vector(3, sizeof(Complex));
+
 	menu_item_R_C = Select_menu_item_R_C();
+	
 
 	if(menu_item_R_C == 1)
 	{
-		Vector* vector_0 = Create_Vector(3, sizeof(Real));
-		Vector* vector_1 = Create_Vector(3, sizeof(Real));
-		Vector* vector_2 = Create_Vector(3, sizeof(Real));
-
-		vector_1 = Enter_coordinates_Real("Print coordinates of first vector", vector_1);
-		vector_2 = Enter_coordinates_Real("Print coordinates of second vector", vector_2);
+		vector_1_real = Enter_coordinates_Real("Print coordinates of first vector", vector_1_real);
+		vector_2_real = Enter_coordinates_Real("Print coordinates of second vector", vector_2_real);
 
 		do
 		{
@@ -425,26 +406,22 @@ int main()
 
 			if(menu_item_op == 1)
 			{
-				vector_0 = Vector_addition_real(vector_1, vector_2);
+				vector_0_real = Vector_addition_real(vector_1_real, vector_2_real);
 				printf("Result\n");
-				printf("%lf,%lf,%lf\n", Get_Real(vector_0,0)->real, Get_Real(vector_0,1)->real, Get_Real(vector_0,2)->real);
+				printf("%lf,%lf,%lf\n", Get_Real(vector_0_real,0)->real, Get_Real(vector_0_real,1)->real, Get_Real(vector_0_real,2)->real);
 			}
 			if(menu_item_op == 2)
 			{
-			    scalar_real = Vector_mul_scalar_real(vector_1, vector_2);
+			    scalar_real = Vector_mul_scalar_real(vector_1_real, vector_2_real);
 				printf("Result\n");
 				printf("%lf\n", scalar_real);
 			}
 			if( menu_item_op == 3)
 			{
-				vector_0 = Vector_mul_vector_real_3d(vector_1, vector_2);
+				vector_0_real = Vector_mul_vector_real_3d(vector_1_real, vector_2_real);
 				printf("Result\n");
-				printf("%lf,%lf,%lf\n", Get_Real(vector_0,0)->real, Get_Real(vector_0,1)->real, Get_Real(vector_0,2)->real);
+				printf("%lf,%lf,%lf\n", Get_Real(vector_0_real,0)->real, Get_Real(vector_0_real,1)->real, Get_Real(vector_0_real,2)->real);
 			}
-
-			free(vector_0);
-			free(vector_1);
-			free(vector_2);
 
 		}while(menu_item_op != 4);
 
@@ -452,12 +429,8 @@ int main()
 
 	if(menu_item_R_C == 2)
 	{
-		Vector* vector_0 = Create_Vector(3, sizeof(Complex));
-		Vector* vector_1 = Create_Vector(3, sizeof(Complex));
-		Vector* vector_2 = Create_Vector(3, sizeof(Complex));
-
-		vector_1 = Enter_coordinates_Complex("Print coordinates of first vector", vector_1);
-		vector_2 = Enter_coordinates_Complex("Print coordinates of second vector", vector_2);
+		vector_1_complex = Enter_coordinates_Complex("Print coordinates of first vector", vector_1_complex);
+		vector_2_complex = Enter_coordinates_Complex("Print coordinates of second vector", vector_2_complex);
 
 		do
 		{
@@ -465,17 +438,17 @@ int main()
 
 			if(menu_item_op == 1)
 			{
-				vector_0 = Vector_addition_complex(vector_1, vector_2);
+				vector_0_complex = Vector_addition_complex(vector_1_complex, vector_2_complex);
 				printf("Result\n");
 				printf("Real part of coordinates\n");
-				printf("%lf,%lf,%lf\n", Get_Complex(vector_0,0)->real, Get_Complex(vector_0,1)->real, Get_Complex(vector_0,2)->real);
+				printf("%lf,%lf,%lf\n", Get_Complex(vector_0_complex,0)->real, Get_Complex(vector_0_complex,1)->real, Get_Complex(vector_0_complex,2)->real);
 				printf("\n");
 				printf("Imagine par of coordinates\n");
-				printf("%lf,%lf,%lf", Get_Complex(vector_0,0)->imag, Get_Complex(vector_0,1)->imag, Get_Complex(vector_0,2)->imag);
+				printf("%lf,%lf,%lf\n", Get_Complex(vector_0_complex,0)->imag, Get_Complex(vector_0_complex,1)->imag, Get_Complex(vector_0_complex,2)->imag);
 			}
 			if(menu_item_op == 2)
 			{
-				scalar_complex = Vector_mul_scalar_complex(vector_1, vector_2);
+				scalar_complex = Vector_mul_scalar_complex(vector_1_complex, vector_2_complex);
 				printf("Result\n");
 				printf("Real part of coordinates\n");
 				printf("%lf\n", scalar_complex->real);
@@ -485,21 +458,22 @@ int main()
 			}
 			if( menu_item_op == 3)
 			{
-				vector_0 = Vector_mul_vector_complex_3d(vector_1, vector_2);
+				vector_0_complex = Vector_mul_vector_complex_3d(vector_1_complex, vector_2_complex);
 				printf("Result\n");
 				printf("Real part of coordinates\n");
-				printf("%lf,%lf,%lf\n", Get_Complex(vector_0,0)->real, Get_Complex(vector_0,1)->real, Get_Complex(vector_0,2)->real);
+				printf("%lf,%lf,%lf\n", Get_Complex(vector_0_complex,0)->real, Get_Complex(vector_0_complex,1)->real, Get_Complex(vector_0_complex,2)->real);
 				printf("\n");
 				printf("Imagine par of coordinates\n");
-				printf("%lf,%lf,%lf", Get_Complex(vector_0,0)->imag, Get_Complex(vector_0,1)->imag, Get_Complex(vector_0,2)->imag);
+				printf("%lf,%lf,%lf\n", Get_Complex(vector_0_complex,0)->imag, Get_Complex(vector_0_complex,1)->imag, Get_Complex(vector_0_complex,2)->imag);
 			}
 
-			free(vector_0);
-			free(vector_1);
-			free(vector_2);
-			
 		}while(menu_item_op != 4);	
 	}
-
+	free(vector_0_real);
+	free(vector_1_real);
+	free(vector_2_real);
+	free(vector_0_complex);
+	free(vector_1_complex);
+	free(vector_2_complex);
 	free(scalar_complex);
 }
